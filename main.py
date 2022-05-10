@@ -190,5 +190,5 @@ async def on_ready():
  async def functionName(ctx):
      await ctx.send("")
 '''
-
-bot.run('OTYzNTU3MTE4ODE5MDY5OTUy.YlX0fw.duqH5C4dY0XH2Btgc6PcY9tjOZk') # haha oops good thing discord already reset it
+runToken = ""
+bot.run(runToken)
