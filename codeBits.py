@@ -152,8 +152,8 @@ def condescend(ctx):
     if ctx.author.name == "Nicki (Mak)" and random.randint(1,50) == 1:
         return "Hey Nicki, I'm not trying to kink shame you, but I think you're developing an unhealthy relationship with my sass protocol"
 
-    if(exists("text_files/condescending_phrases.txt")):
-        condescend_list=open(r"text_files/condescending_phrases.txt",'r')
+    if(exists("text_files/condescending-phrases.txt")):
+        condescend_list=open(r"text_files/condescending-phrases.txt",'r')
     else:
         return condescend
     lines = 0
