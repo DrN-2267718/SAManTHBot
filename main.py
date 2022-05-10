@@ -82,9 +82,8 @@ async def test(ctx, *arg):
     await ctx.channel.send(arg)
 
 @bot.command(
-    hidden=True,
     help="this does something, unless i didn't actually put anything in which case it just says Trash",
-    brief="This text shouldn't appear")
+    brief="I only say the truth")
 async def anime(ctx):
     await ctx.channel.send("Trash")
 
@@ -101,28 +100,24 @@ async def ping(ctx):
     await ctx.channel.send("pong")
 
 @bot.command(
-    hidden=True,
     help="you tryna hold hands with my bot you son of a bitch?! i'll kill you!!",
     brief="Don't even think about it, hentai!")
 async def holdhands(ctx):
     await ctx.send("We can't do that we're not married!")
 
 @bot.command(
-    hidden=True,
-    help="excuse me kindly fuck off",
+    help="excuse me, fuck off",
     brief="No")
 async def marry(ctx):
     await ctx.send("I'm a bot we can't get married")
 
 @bot.command(
-    hidden=True,
     help="BONK",
     brief="BONK")
 async def lewd(ctx):
     await ctx.send("Do not fist android girls")
 
 @bot.command(
-    hidden=True,
     help="be careful what you wish for",
     brief="Talk to me")
 async def talk(ctx):
@@ -196,4 +191,4 @@ async def on_ready():
      await ctx.send("")
 '''
 
-bot.run()
+bot.run('OTYzNTU3MTE4ODE5MDY5OTUy.YlX0fw.duqH5C4dY0XH2Btgc6PcY9tjOZk')

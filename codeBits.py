@@ -149,7 +149,7 @@ def condescend(ctx):
     random.seed()
     condescend = "N is a terrible programmer"
     
-    if ctx.author.name == "Nicki (Mak)" and random.randint(1,50) == 1:
+    if ctx.author.name == "Nicki (Mak)" and random.randint(1,1) == 1:
         return "Hey Nicki, I'm not trying to kink shame you, but I think you're developing an unhealthy relationship with my sass protocol"
 
     if(exists("text_files/condescending-phrases.txt")):
