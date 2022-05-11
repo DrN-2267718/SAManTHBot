@@ -35,7 +35,7 @@ def artPrompt(args):
     setting = 0
     try:
         setting = int(args[0])
-        if setting <= 1:
+        if setting <= 1 or setting > 5:
             raise ValueError
     except ValueError:
         return "Invalid input, use \"}help draw\" for more information"

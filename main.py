@@ -16,8 +16,11 @@ import random
 import chatot
 import codeBits
 import os
+import botcode
+import SAMInfo
 from discord.ext import commands
 from discord.errors import Forbidden
+from SAMInfo import SAManTHBot
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('SAManTHBot.main')
@@ -130,7 +133,7 @@ async def grump(ctx):
     await ctx.send(codeBits.grumpQuote())
 
 @bot.command(
-    help='''Generates a drawing prompt, can be told how many words are in the propmt, defaults to 2.
+    help='''Generates a drawing prompt, can be told how many words are in the propmt [2-5], defaults to 2.
     2 = adjective noun or noun verb
     3 = adjective noun verb or noun verb adverb or adjective adjective noun
     Working on allowing more customization''',
@@ -190,5 +193,6 @@ async def on_ready():
  async def functionName(ctx):
      await ctx.send("")
 '''
-runToken = ""
-bot.run(runToken)
+SAMB = SAManTHBot()
+runKey = botcode.getKey()
+bot.run(runKey)
