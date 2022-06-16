@@ -1,3 +1,7 @@
+import chatot
+import SAMData as data
+import SAMDataMod as mod
+import SAMInfo as info
 import random
 import datetime
 import os
@@ -5,12 +9,18 @@ import discord
 from os.path import exists
 from datetime import datetime
 
+# these get set by the setup() function, which also sets them to be global
+list_noun = []
+list_verb = []
+list_verbing = []
+list_adjective = []
+list_adverb = []
 
 def grumpQuote():
     random.seed()
     
-    if(exists("text_files/grumps.txt")):
-        grumpDoc=open(r"text_files/grumps.txt",'r')
+    if(exists("text-files/grumps.txt")):
+        grumpDoc=open(r"text-files/grumps.txt",'r')
     else:
         return "Document not found"
     grumpLine = 0
@@ -40,24 +50,9 @@ def artPrompt(args):
     except ValueError:
         return "Invalid input, use \"}help draw\" for more information"
     except IndexError:
-        setting = 2
+        setting = random.randint(2,3)
 
     random.seed()
-
-    if(exists("text_files/nouns.txt")) and exists("text_files/verbs.txt") and exists("text_files/verbs-ing.txt") and exists("text_files/adjectives.txt") and exists("text_files/adverbs.txt"):
-        doc_noun=open(r"text_files/nouns.txt",'r')
-        doc_verb=open(r"text_files/verbs.txt",'r')
-        doc_verbing=open(r"text_files/verbs-ing.txt",'r')
-        doc_adjective=open(r"text_files/adjectives.txt",'r')
-        doc_adverb=open(r"text_files/adverbs.txt",'r')
-    else:
-        return "Missing necessary files, please yell at N for me"
-
-    noun = []
-    verb = []
-    verbing = []
-    adjective = []
-    adverb = []
     prompt = ""
 
     if setting == 0:
@@ -68,48 +63,30 @@ def artPrompt(args):
         rand2 = random.randint(1,3)
 
     if setting == 2 and rand1 == 1: # adjective noun
-        adjective = to_list(adjective,doc_adjective)
-        noun = to_list(noun,doc_noun)
-        randae = rand_PoS(adjective)
-        randn = rand_PoS(noun)
+        randae = rand_PoS(list_adjective)
+        randn = rand_PoS(list_noun)
         prompt = "{} {}".format(randae, randn)
     elif setting == 2 and rand1 == 2: # noun verbing
-        noun = to_list(noun,doc_noun)
-        verbing = to_list(verbing,doc_verbing)
-        randn = rand_PoS(noun)
-        randv = rand_PoS(verbing)
+        randn = rand_PoS(list_noun)
+        randv = rand_PoS(list_verbing)
         prompt = "{} {}".format(randn,randv)
     elif setting == 3 and rand2 == 1: # adjective noun verbing
-        adjective = to_list(adjective,doc_adjective)
-        noun = to_list(noun,doc_noun)
-        verbing = to_list(verbing,doc_verbing)
-        randae = rand_PoS(adjective)
-        randn = rand_PoS(noun)
-        randv = rand_PoS(verbing)
+        randae = rand_PoS(list_adjective)
+        randn = rand_PoS(list_noun)
+        randv = rand_PoS(list_verbing)
         prompt = "{} {} {}".format(randae,randn,randv)
     elif setting == 3 and rand2 == 2: #noun verbing adverb
-        noun = to_list(noun,doc_noun)
-        verbing = to_list(verbing,doc_verbing)
-        adverb = to_list(adverb,doc_adverb)
-        randn = rand_PoS(noun)
-        randv = rand_PoS(verbing)
-        randab = rand_PoS(adverb)
+        randn = rand_PoS(list_noun)
+        randv = rand_PoS(list_verbing)
+        randab = rand_PoS(list_adverb)
         prompt = "{} {} {}".format(randn,randv,randab)
     elif setting == 3 and rand2 == 3: # adjective adjective noun
-        adjective = to_list(adjective,doc_adjective)
-        noun = to_list(noun,doc_noun)
-        randae1 = rand_PoS(adjective)
-        randae2 = rand_PoS(adjective)
-        randn = rand_PoS(noun)
+        randae1 = rand_PoS(list_adjective)
+        randae2 = rand_PoS(list_adjective)
+        randn = rand_PoS(list_noun)
         prompt = "{} {} {}".format(randae1,randae2,randn)
     else:
         prompt = "Work in progress, please be patient"
-
-    doc_noun.close()
-    doc_verb.close()
-    doc_verbing.close()
-    doc_adjective.close()
-    doc_adverb.close()
     return prompt
 
 def rand_PoS(PoS):
@@ -148,12 +125,14 @@ def schoolNight():
 def condescend(ctx):
     random.seed()
     condescend = "N is a terrible programmer"
+
+    print(ctx.author)
     
-    if ctx.author.name == "Nicki (Mak)" and random.randint(1,1) == 1:
+    if str(ctx.author) == "NickIcarus" and random.randint(1,10) == 1:
         return "Hey Nicki, I'm not trying to kink shame you, but I think you're developing an unhealthy relationship with my sass protocol"
 
-    if(exists("text_files/condescending-phrases.txt")):
-        condescend_list=open(r"text_files/condescending-phrases.txt",'r')
+    if(exists("text-files/condescending_phrases.txt")):
+        condescend_list=open(r"text-files/condescending_phrases.txt",'r')
     else:
         return condescend
     lines = 0
@@ -191,8 +170,8 @@ def rollBones(args):
         iterations = 1
     if iterations < 1:
         return "The only thing that're being rolled are my digital eyes"
-    elif iterations > 10:
-        return "Less than 10 rolls please, I don't trust N's coding skills that much"
+    elif iterations > 20:
+        return ("Why do you need to roll {} dice?".format(iterations))
     rolls = []
     for i in range(iterations):
         rolls.append(random.randint(1,die))
@@ -202,8 +181,8 @@ def rollBones(args):
 def ourQuotes():
     random.seed()
     
-    if(exists("text_files/genius_quotes.txt")):
-        quote_list=open(r"text_files/genius_quotes.txt",'r')
+    if(exists("text-files/genius_quotes.txt")):
+        quote_list=open(r"text-files/genius_quotes.txt",'r')
     else:
         return "\"Document not found\" - SAManTHBot"
     lines = 0
@@ -223,7 +202,67 @@ def ourQuotes():
     quote_list.close()
     return dumb
 
-def to_list(list, doc):
+def to_list(doc):
+    lost = []
     for i, line in enumerate(doc):
-        list.append(line)
-    return list
+        lost.append(line)
+    return lost
+
+def eventLogger(event, eventType): # event is only used in special cases, otherwise you can pass anything it doesn't matter
+    if exists("SAManTHBot-docs/log.txt"):
+        try:
+            f = open("SAManTHBot-docs/log.txt",'a')
+        except FileNotFoundError:
+            f = open("ERROR.txt",'w')
+            f.write("Directory SAManTHBot-docs does not exist")
+            f.close()
+            return
+    else:
+        f = open("SAManTHBot-docs/log.txt",'w')
+    if eventType == 0: # error encountered
+        f.write("{} - I've encountered an issue, context: {}\n".format(str(datetime.utcnow()),event))
+        print("Shutting down")
+    elif eventType == 1: # lost connection
+        f.write("{} - I've lost connection\n".format(str(datetime.utcnow())))
+    elif eventType == 2: # resumed connection
+        f.write("{} - I've resumed normal operation\n".format(str(datetime.utcnow())))
+    elif eventType == 3: # logged in for the first time
+        f.write("{} - I've logged in\n".format(str(datetime.utcnow())))
+    elif eventType == 4: # doing setup
+        f.write("{} - Beggining setup procedure\n".format(str(datetime.utcnow())))
+    elif eventType == 5: # logging out
+        f.write("{} - Logging out\n".format(str(datetime.utcnow())))
+    f.close()
+
+def setup(first):
+    eventLogger("null",4)
+    random.seed()
+    if(exists("text-files/nouns.txt")) and exists("text-files/verbs.txt") and exists("text-files/verbs-ing.txt") and exists("text-files/adjectives.txt") and exists("text-files/adverbs.txt"):
+        doc_noun=open(r"text-files/nouns.txt",'r')
+        doc_verb=open(r"text-files/verbs.txt",'r')
+        doc_verbing=open(r"text-files/verbs-ing.txt",'r')
+        doc_adjective=open(r"text-files/adjectives.txt",'r')
+        doc_adverb=open(r"text-files/adverbs.txt",'r')
+    else:
+        eventLogger("Missing POS files",0)
+        return False
+
+    # making the varibles global as a ""temporary"" fix until i find a better way
+    global list_noun, list_verb, list_verbing, list_adjective, list_adverb
+    list_noun = to_list(doc_noun)
+    list_verb = to_list(doc_verb)
+    list_verbing = to_list(doc_verbing)
+    list_adjective = to_list(doc_adjective)
+    list_adverb = to_list(doc_adverb)
+
+    doc_noun.close()
+    doc_verb.close()
+    doc_verbing.close()
+    doc_adjective.close()
+    doc_adverb.close()
+    
+    if first:
+        eventLogger("null",3)
+    else:
+        eventLogger("null",2)
+    return True
