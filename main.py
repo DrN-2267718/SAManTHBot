@@ -10,17 +10,21 @@
 #                 unless i forget haha oops                  #
 #============================================================#
 
+import codeBits
+import chatot
+import SAMData as data
+import SAMDataMod as mod
+import SAMInfo as info
 import discord
 import logging
 import random
-import chatot
-import codeBits
 import os
 import botcode
-import SAMInfo
 from discord.ext import commands
 from discord.errors import Forbidden
-from SAMInfo import SAManTHBot
+from datetime import datetime
+import subprocess
+import sys
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('SAManTHBot.main')
@@ -30,9 +34,6 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 
 bot = commands.Bot(command_prefix="}",case_insensitive=True)
-
-random.seed()
-
 
 # stolen from Jared Newsom
 async def send_embed(ctx, embed):
@@ -70,7 +71,7 @@ async def on_message(message):
 
     # check for people talking to the bot
     elif mess.startswith(bot_user):
-        await chatot.reply(message,mess)
+        await chatot.reply(message,mess,SAMB)
         
     else:
         await bot.process_commands(message)
@@ -97,7 +98,7 @@ async def bigShot(ctx):
     await ctx.channel.send("Kromer")
 
 @bot.command(
-    help="SAManTHBot stores your ip address, bank account information, social security number, and phone number every time you use this command",
+    help="SAManTHBot stores your ip address, bank account information, social security number, phone number, and current location every time you use this command",
     brief="Prints pong")
 async def ping(ctx):
     await ctx.channel.send("pong")
@@ -124,7 +125,7 @@ async def lewd(ctx):
     help="be careful what you wish for",
     brief="Talk to me")
 async def talk(ctx):
-    await chatot.conversation(ctx)
+    await chatot.conversation(ctx,SAMB)
 
 @bot.command(
     help="why do people watch this? don't watch this! UNSUBSCRIBE!!!",
@@ -133,7 +134,7 @@ async def grump(ctx):
     await ctx.send(codeBits.grumpQuote())
 
 @bot.command(
-    help='''Generates a drawing prompt, can be told how many words are in the propmt [2-5], defaults to 2.
+    help='''Generates a drawing prompt, can be told how many words are in the prompt [2-5], if no prompt is given a random number is chosen.
     2 = adjective noun or noun verb
     3 = adjective noun verb or noun verb adverb or adjective adjective noun
     Working on allowing more customization''',
@@ -152,9 +153,9 @@ async def school(ctx):
     help="she's too powerful",
     brief="Just try me")
 async def logout(ctx):
-    print("Logging out")
+    codeBits.eventLogger("null",5)
     await bot.change_presence(status=discord.Status.offline)
-    await bot.logout()
+    await bot.close()
 
 @bot.command(
     help="Format: }roll <die_sides> <#_of_rolls>\n die_sides must be one of these: 2, 4, 6, 8, 10, 12, 20, 100\n #_of_roles must be > 0 and 10 max",
@@ -163,7 +164,7 @@ async def roll(ctx,*args):
     await ctx.send(codeBits.rollBones(args))
 
 @bot.command(
-    help="goddess we're stupid",
+    help="goddess, we're stupid",
     brief="Get a random stupid quote"
 )
 async def quote(ctx):
@@ -179,10 +180,23 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_ready():
-    print('logged in as {0.user}'.format(bot))
-    random.seed()
-    activity = discord.Activity(name='over the lab', type=discord.ActivityType.watching)
-    await bot.change_presence(status=discord.Status.online, activity=activity)
+    if codeBits.setup(True):
+        print('logged in as {0.user}'.format(bot))
+        await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name='over the lab', type=discord.ActivityType.watching))
+    else:
+        await bot.change_presence(status=discord.Status.offline)
+        await bot.close()
+
+@bot.event
+async def on_disconnect():
+    codeBits.eventLogger("null",1)
+
+@bot.event
+async def on_resumed():
+    if not codeBits.setup(False):
+        await bot.change_presence(status=discord.Status.offline)
+        await bot.close()
+
 
 '''
  template
@@ -193,6 +207,6 @@ async def on_ready():
  async def functionName(ctx):
      await ctx.send("")
 '''
-SAMB = SAManTHBot()
+SAMB = info.SAManTHBot()
 runKey = botcode.getKey()
 bot.run(runKey)
