@@ -235,6 +235,7 @@ def ourQuotes():
 
 def to_list(doc):
     lost = []
+    # DO NOT REMOVE THE i OR lost WILL BE A TUPLE
     for i,line in enumerate(doc):
         lost.append(line)
     return lost
