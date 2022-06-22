@@ -1,7 +1,3 @@
-import codeBits
-import chatot
-import SAMData as data
-import SAMDataMod as mod
 
 class SAManTHBot():
     name = "SAManTHBot"

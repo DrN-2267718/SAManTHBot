@@ -1,6 +1,5 @@
 import codeBits
 import chatot
-import SAMDataMod as mod
 import SAMInfo as info
 import scipy as sci
 import numpy as num
@@ -245,7 +244,7 @@ def checkDateValid(date):
 
 
 class commandData:
-    """Keeping track of how many times each command is used"""
+    """Base class for collecting data on each command's usage"""
     total = 0
     incorrect = 0
 
@@ -258,22 +257,42 @@ class draw(commandData):
     varientCount = [] # counts times each varient called
     POSCount = [] # counts times each POS is called
     words = [] # list of every word
-    wordsCount = [] # counts times each word is used
-    wrdCnt = []
-    # words and wordsCount could be combined into a single 2D array if i want to get into that mess
+    wordsCount = {} # counts times each word is used
 
     def __init__(self, list_nouns, list_verbs, list_verbing, list_adjectives, list_adverbs):
         self.varientCount = [0,0,0,0,0] # 0:draw, 1:2, 2:3, 3:4, 4:5
         self.POSCount = [0,0,0,0,0] # 0:noun, 1:verb, 2:verbing, 3:adjective, 4:adverb
-        self.words.append(list_nouns + list_verbs + list_verbing + list_adjectives + list_adverbs)
-        for i in self.words: # a new 0 for every word
-            self.wordsCount.append(0)
+        self.words = list_nouns + list_verbs + list_verbing + list_adjectives + list_adverbs
+        for word in self.words: # a new 0 for every word
+            self.wordsCount.update({word: 0})
 
 
 class roll(commandData):
-    dieCount = [] # how many times each die is rolled
+    """Special class for roll"""
+    dieCount = {} # how many times each die is rolled
     rollsCount = [] # how many times each number of rolls is called
-    outcomes = [[]] # list of every outcome from each die
+    outcomes = {} # list of every outcome from each die
 
     def __init__(self):
-        self.dieCount = [0] * 8 # 0:2, 1:4, 2:6, 3:8, 4:10, 5:12, 6:20, 7:100
+        self.dieCount = { # why a dict? why not? in fact, why not marry lists if you like them so much?!
+        2:0,
+        4:0,
+        6:0,
+        8:0,
+        10:0,
+        12:0,
+        20:0,
+        100:0
+        }
+        self.rollsCount = [0] * 20 # 1-20
+        for x in self.dieCount:
+            self.outcomes.update({x:[]})
+
+
+class specils(commandData):
+    """Special class for the other special commands that aren't special enough to get an individual class"""
+    statTrack = {}
+
+    def __init__(self, listings):
+        for x in listings:
+            self.statTrack.update({x:0})

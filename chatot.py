@@ -1,6 +1,5 @@
 import codeBits
 import SAMData as data
-import SAMDataMod as mod
 import SAMInfo as info
 import discord
 
@@ -10,8 +9,6 @@ async def reply(message, mess, SAM):
     if author_user == "Dr. N":
         author_user = "Doctor"
 
-    
-    
     if "Thank you" in mess or "thank you" in mess or "Thankies" in mess or "thankies" in mess:
         await message.channel.send("You're welcome {}".format(author_user))
     elif "Thank" in mess or "thank" in mess:

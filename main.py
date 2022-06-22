@@ -1,9 +1,6 @@
 #============================================================#
-#                     SAManTHBot v0.1                        #
-#                     "made" by Dr. N                        #
-# code stolen from various sources i will list below         #
-# rule of thumb: if it works well and looks nice, it wasn't  #
-# made by me                                                 #
+#                     SAManTHBot v0.4                        #
+#                         by Dr. N                           #
 #============================================================#
 #  sources for the code i stole is usually above said code   #
 #                                                            #
@@ -13,18 +10,12 @@
 import codeBits
 import chatot
 import SAMData as data
-import SAMDataMod as mod
 import SAMInfo as info
 import discord
 import logging
-import random
-import os
 import botcode
 from discord.ext import commands
 from discord.errors import Forbidden
-from datetime import datetime
-import subprocess
-import sys
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('SAManTHBot.main')
