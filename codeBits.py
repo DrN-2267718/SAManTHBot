@@ -235,7 +235,7 @@ def ourQuotes():
 
 def to_list(doc):
     lost = []
-    for line in enumerate(doc):
+    for i,line in enumerate(doc):
         lost.append(line)
     return lost
 
@@ -252,7 +252,7 @@ def eventLogger(event, eventType): # event is only used in special cases, otherw
             elif eventType == 3: # logged in for the first time
                 f.write("{} - I've logged in\n".format(str(datetime.utcnow())))
             elif eventType == 4: # doing setup
-                f.write("{} - Beggining setup procedure\n".format(str(datetime.utcnow())))
+                f.write("{} - Beginning setup procedure\n".format(str(datetime.utcnow())))
             elif eventType == 5: # logging out
                 f.write("{} - Logging out\n".format(str(datetime.utcnow())))
     else:
@@ -278,6 +278,8 @@ def setup(first):
     else:
         eventLogger("Missing POS files",0)
         return False
+
+    # trigger curator.py to refresh all curated docs
     
     if first:
         eventLogger("null",3)
